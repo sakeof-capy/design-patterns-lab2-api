@@ -1,3 +1,6 @@
 [submodule "dependencies/cpp-httplib"]
 	path = dependencies/cpp-httplib
 	url = https://github.com/yhirose/cpp-httplib.git
+[submodule "dependencies/cpp-dotenv"]
+	path = dependencies/cpp-dotenv
+	url = https://github.com/adeharo9/cpp-dotenv.git

@@ -1,0 +1,349 @@
+openapi: 3.0.0
+info:
+  title: Capybara API
+  version: 1.0.0
+  description: API for managing capybara information
+tags:
+- name: Capybaras
+  description: Operations related to capybaras.
+- name: Habitats
+  description: Operations related to capybara habitats.
+paths:
+  /capybaras:
+    get:
+      summary: Get a list of all capybaras
+      tags: 
+        - Capybaras
+      responses:
+        '200':
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Capybara'
+        '500':
+          description: Server error
+    post:
+      summary: Add a new capybara
+      tags: 
+        - Capybaras
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CapybaraInput'
+      responses:
+        '201':
+          description: Capybara successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Capybara'
+        '400':
+          description: Bad request
+        '500':
+          description: Server error
+  /capybaras/{id}:
+    get:
+      summary: Get capybara information by ID
+      tags: 
+        - Capybaras
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Capybara'
+        '404':
+          description: Capybara not found
+        '500':
+          description: Server error
+    put:
+      summary: Update capybara information
+      tags: 
+        - Capybaras
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CapybaraInput'
+      responses:
+        '200':
+          description: Capybara successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Capybara'
+        '400':
+          description: Bad request
+        '404':
+          description: Capybara not found
+        '500':
+          description: Server error
+    patch:
+      summary: Partially update capybara information
+      tags: 
+        - Capybaras
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CapybaraPartialUpdate'
+      responses:
+        '200':
+          description: Capybara successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Capybara'
+        '400':
+          description: Bad request
+        '404':
+          description: Capybara not found
+        '500':
+          description: Server error
+    delete:
+      summary: Delete a capybara
+      tags: 
+        - Capybaras
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Capybara successfully deleted
+        '404':
+          description: Capybara not found
+        '500':
+          description: Server error
+  /capybaras/{id}/friends:
+    get:
+      summary: Get the list of capybara's friends
+      tags: 
+        - Capybaras
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Capybara'
+        '404':
+          description: Capybara not found
+        '500':
+          description: Server error
+  /capybaras/{id}/habitat:
+    get:
+      summary: Get the capybara's habitat
+      tags: 
+        - Capybaras
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Habitat'
+        '404':
+          description: Capybara or habitat not found
+        '500':
+          description: Server error
+  /habitats:
+    get:
+      summary: Get a list of all habitats
+      tags: 
+        - Habitats
+      responses:
+        '200':
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Habitat'
+        '500':
+          description: Server error
+    post:
+      summary: Add a new habitat
+      tags: 
+        - Habitats
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HabitatInput'
+      responses:
+        '201':
+          description: Habitat successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Habitat'
+        '400':
+          description: Bad request
+        '500':
+          description: Server error
+  /habitats/{id}:
+    get:
+      summary: Get habitat information by ID
+      tags: 
+        - Habitats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Habitat'
+        '404':
+          description: Habitat not found
+        '500':
+          description: Server error
+    put:
+      summary: Update habitat information
+      tags: 
+        - Habitats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HabitatInput'
+      responses:
+        '200':
+          description: Habitat successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Habitat'
+        '400':
+          description: Bad request
+        '404':
+          description: Habitat not found
+        '500':
+          description: Server error
+    delete:
+      summary: Delete a habitat
+      tags: 
+        - Habitats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Habitat successfully deleted
+        '404':
+          description: Habitat not found
+        '500':
+          description: Server error
+components:
+  schemas:
+    Capybara:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        age:
+          type: integer
+        friends:
+          type: array
+          items:
+            type: integer
+        habitatId:
+          type: integer
+    CapybaraInput:
+      type: object
+      properties:
+        name:
+          type: string
+        age:
+          type: integer
+    CapybaraPartialUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        age:
+          type: integer
+        friends:
+          type: array
+          items:
+            type: integer
+        habitatId:
+          type: integer
+    Habitat:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        location:
+          type: string
+    HabitatInput:
+      type: object
+      properties:
+        name:
+          type: string
+        location:
+          type: string
