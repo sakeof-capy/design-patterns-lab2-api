@@ -2,9 +2,13 @@
 #include <httplib.h>
 #include <string_view>
 #include <array>
+#include <format>
 #include <span>
+#include "nlohmann/json.hpp"
 
 #include "env.hpp"
+
+namespace json = nlohmann;
 
 static constexpr std::string_view SINGLE_CAPY_JSON = R"({
     "id": 1,
@@ -73,12 +77,66 @@ int next_status(const std::span<const int> statuses)
     return statuses[randomIndex];
 }
 
+struct Visitor {
+    std::string name;
+    int id;
+    int age;
+};
+
+void to_json(json::json& j, const Visitor& p) {
+    j = json::json{
+        {"id", p.id},
+        {"name", p.name},
+        {"age", p.age}
+    };
+}
+
+std::vector<Visitor> generate_visitors()
+{
+    std::vector<Visitor> visitors;
+    int num_visitors = rand() % 10 + 1;
+    for (int i = 0; i < num_visitors; ++i) {
+        visitors.push_back(Visitor {
+            .id = i,
+            .name = std::format("Capy McCapface{}", i),
+            .age = i * 10 + 22,
+        });
+    }
+    return visitors;
+}
+
+[[noreturn]] void stream_sse(const httplib::Request&, httplib::Response& res) {
+    res.set_content_provider("text/event-stream", [&](size_t offset, httplib::DataSink& sink) {
+        res.set_header("Content-Type", "text/event-stream");
+        res.set_header("Cache-Control", "no-cache");
+        res.set_header("Connection", "keep-alive");
+
+        while (true) {
+            std::vector<Visitor> visitors = generate_visitors();
+
+            json::json visitors_json = json::json::array();
+            for (const Visitor& visitor : visitors) {
+                visitors_json.push_back(visitor);
+            }
+
+            std::string message = "data: " + visitors_json.dump() + "\n\n";
+            sink.write(message.data(), message.size());
+
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+        }
+
+        return true;
+    });
+}
+
 int main()
 {
     httplib::Server server;
     const int port = resolve_env<int>("SERVER_PORT");
 
     std::cout << "Server's listening on port " << port << '\n' << std::flush;
+
+    server.Get("/sse", stream_sse);
 
     server.Get("/capybaras", [](const httplib::Request& req, httplib::Response& res) {
         // GET /capybaras

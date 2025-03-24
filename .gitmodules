@@ -4,3 +4,6 @@
 [submodule "dependencies/cpp-dotenv"]
 	path = dependencies/cpp-dotenv
 	url = https://github.com/adeharo9/cpp-dotenv.git
+[submodule "dependencies/nlohmann/json"]
+	path = dependencies/nlohmann/json
+	url = https://github.com/nlohmann/json.git
