@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capybara Visitors</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+    <script>
+        // Function to update the visitor table with new data
+        function updateVisitorTable(visitors) {
+            const table = document.getElementById("visitorTable");
+            const tbody = table.getElementsByTagName("tbody")[0];
+            tbody.innerHTML = ''; // Clear the existing table rows
+
+            visitors.forEach(visitor => {
+                const row = document.createElement("tr");
+
+                const idCell = document.createElement("td");
+                idCell.textContent = visitor.id;
+                row.appendChild(idCell);
+
+                const nameCell = document.createElement("td");
+                nameCell.textContent = visitor.name;
+                row.appendChild(nameCell);
+
+                const ageCell = document.createElement("td");
+                ageCell.textContent = visitor.age;
+                row.appendChild(ageCell);
+
+                tbody.appendChild(row);
+            });
+        }
+
+        // Set up the SSE connection
+        const eventSource = new EventSource('http://localhost:8080/visitors');
+        eventSource.onmessage = function(event) {
+            const visitors = JSON.parse(event.data); // Parse the JSON data
+            updateVisitorTable(visitors);
+        };
+    </script>
+</head>
+<body>
+    <h1>Capybara Visitors</h1>
+    <table id="visitorTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Age</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- The rows will be dynamically added here -->
+        </tbody>
+    </table>
+</body>
+</html>
