@@ -1,5 +1,15 @@
 # Capybara API
 
+## Clone the Repo
+Recursive clone is required:
+```bash
+git clone --required git@github.com:sakeof-capy/design-patterns-lab2-api.git
+```
+or 
+```bash
+git clone --required https://github.com/sakeof-capy/design-patterns-lab2-api.git
+```
+
 ## API Docs
 The swagger file can be found here: `./swagger-docs.yaml`.
 
