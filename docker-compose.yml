@@ -1,7 +1,26 @@
 services:
-  web:
-    build: .
+  api:
+    build:
+      context: .
+      dockerfile: ./docker/MainApiDockerfile
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     env_file:
       - .env
+  integration:
+    build:
+      context: .
+      dockerfile: ./docker/IntegrationDockerfile
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    env_file:
+      - .env
+    depends_on:
+      - external_api
+  external_api:
+    build:
+      context: .
+      dockerfile: ./docker/ExternalApiDockerfile
+    ports:
+      - "8888:8888"
+
