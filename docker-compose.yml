@@ -7,20 +7,25 @@ services:
       - "${SERVER_PORT}:${SERVER_PORT}"
     env_file:
       - .env
-  integration:
-    build:
-      context: .
-      dockerfile: ./docker/IntegrationDockerfile
-    ports:
-      - "${SERVER_PORT}:${SERVER_PORT}"
-    env_file:
-      - .env
-    depends_on:
-      - external_api
   external_api:
     build:
       context: .
       dockerfile: ./docker/ExternalApiDockerfile
+    networks:
+      - default_network
     ports:
       - "8888:8888"
+  integration:
+    build:
+      context: .
+      dockerfile: ./docker/IntegrationDockerfile
+    env_file:
+      - .env
+    depends_on:
+      - external_api
+    networks:
+      - default_network
 
+networks:
+  default_network:
+    driver: bridge

@@ -1,14 +1,15 @@
-main-api:
-	docker compose up api
+DC = docker compose
+FLAGS ?=
 
-build-main-api:
-	docker compose up api --build
+main-api:
+	$(DC) up api $(FLAGS)
 
 integration:
-	docker compose up integration external_api
+	$(DC) up integration external_api $(FLAGS)
 
-build-integration:
-	docker compose up integration external_api
+integration-logs:
+	$(DC) up -d integration external_api $(FLAGS)
+	$(DC) logs -f integration --tail=0
 
 stop:
-	docker compose down -v
+	$(DC) down -v
